@@ -41,12 +41,18 @@ app.get("/", (req, res) => {
 });
 
 app.get("/values/all", async (req, res) => {
+
+  console.log("Post values/all");
+
   const values = await pgClient.query("SELECT * from values");
 
   res.send(values.rows);
 });
 
 app.get("/values/current", async (req, res) => {
+
+  console.log("get values/current");
+
   redisClient.hgetall("values", (err, values) => {
     res.send(values);
   });
@@ -54,6 +60,8 @@ app.get("/values/current", async (req, res) => {
 
 app.post("/values", async (req, res) => {
   const index = req.body.index;
+
+  console.log("Post values");
 
   if (parseInt(index) > 40) {
     return res.status(422).send("Index too high");
@@ -69,3 +77,13 @@ app.post("/values", async (req, res) => {
 app.listen(5000, (err) => {
   console.log("Listening");
 });
+
+var fs = require('fs');
+var util = require('util');
+var log_file = fs.createWriteStream(__dirname + '/debug.log', {flags : 'w'});
+var log_stdout = process.stdout;
+
+console.log = function(d) { //
+  log_file.write(util.format(d) + '\n');
+  log_stdout.write(util.format(d) + '\n');
+};
