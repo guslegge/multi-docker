@@ -1,9 +1,11 @@
 sudo: required
-servies: 
+language: generic
+
+services: 
   - docker
 
-before install:
-  -docker build -t guslegge/react-test -f ./client/Dockerfile.dev ./
+before_install:
+  - docker build -t guslegge/react-test -f ./client/Dockerfile.dev ./client
 
 script:
   - docker run guslegge/react-test npm test -- --coverage
@@ -13,11 +15,9 @@ after_sucess:
   - docker build -t guslegge/multi-nginx ./nginx
   - docker build -t guslegge/multi-server ./server
   - docker build -t guslegge/multi-worker ./worker
-  
-  #  Log in to the docker CLI
-  - echo "$DOCKER_PASSWROD" |  docker login -u "$DOCKER_ID" --password-stdin
-
-  # Take these images and push them to docker hub
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
   - docker push guslegge/multi-client
   - docker push guslegge/multi-nginx
   - docker push guslegge/multi-server
