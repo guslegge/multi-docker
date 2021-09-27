@@ -1,0 +1,28 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions":[
+        {
+            "name": "client",
+            "image": "guslegge/guslegge/multi-client",
+            "hostname": "client",
+            "essential": false
+        },
+        {
+            "name": "server",
+            "image": "guslegge/guslegge/multi-server",
+            "hostname": "api",
+            "essential": false
+        },
+        {
+            "name": "worker",
+            "image": "guslegge/guslegge/multi-worker",
+            "hostname": "worker",
+            "essential": false
+        },
+        {
+            "name": "naginx",
+            "image": "guslegge/guslegge/multi-naginx",
+            "essential": true
+        }
+    ]
+}
